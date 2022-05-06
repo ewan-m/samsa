@@ -1,14 +1,29 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<!-- Doctype HTML5 -->
+<html lang="en">
+
+<head>
     <meta charset="utf-8" />
     <meta
-      http-equiv="Content-Security-Policy"
-      content="script-src 'self' 'unsafe-inline'"
-    />
-    <title>Hello Electron React!</title>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+    http-equiv="Content-Security-Policy"
+    content="script-src 'self' 'unsafe-inline'"
+  />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Samsa</title>
+</head>
+
+<body class="no-focus-outline nice-scrolls">
+    <div id="root" tabindex="-1"></div>
+    <script type="module" src="index.tsx"></script>
+    <script>
+        document.body.addEventListener('keyup', function(e) {
+            if (e.which === 9) /* tab */ {
+                document.body.classList.remove('no-focus-outline');
+            }
+        });
+    </script>
+    <noscript>You need to enable JavaScript in your browser settings to run this web application.</noscript>
+</body>
+
 </html>

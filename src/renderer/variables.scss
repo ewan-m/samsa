@@ -1,0 +1,12 @@
+$backgroundUp: #f9f9f9;
+$backgroundDown: #e8eced;
+$up: #fff;
+$textUp: #4a4f66;
+$textDown: #263249;
+$primary: #07aeaf;
+
+@mixin desktop {
+  @media (min-width: 450px) {
+    @content;
+  }
+}

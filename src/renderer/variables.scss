@@ -1,12 +1,124 @@
-$backgroundUp: #f9f9f9;
-$backgroundDown: #e8eced;
-$up: #fff;
-$textUp: #4a4f66;
-$textDown: #263249;
-$primary: #07aeaf;
+.theme {
+  &__defaultLight {
+    --backgroundUp: rgb(245, 245, 245);
+    --backgroundDown: rgb(220, 220, 220);
+    --up: #fff;
+    --down: #000;
+    --downTransparent05: rgba(0, 0, 0, 0.05);
+    --downTransparent07: rgba(0, 0, 0, 0.07);
+    --downTransparent10: rgba(0, 0, 0, 0.1);
+    --downTransparent15: rgba(0, 0, 0, 0.15);
+    --downTransparent20: rgba(0, 0, 0, 0.2);
+    --textDown: rgba(0, 0, 0, 0.87);
+    --primary: #1976d2;
+    --primaryTransparent: #1976d21a;
+    --errorBackground: #ffcece;
+  }
+  &__defaultDark {
+    --backgroundUp: #121212;
+    --backgroundDown: #242424;
+    --up: rgb(51, 51, 51);
+    --down: rgb(233, 233, 233);
+    --downTransparent05: rgba(0, 0, 0, 0.05);
+    --downTransparent07: rgba(0, 0, 0, 0.07);
+    --downTransparent10: rgba(0, 0, 0, 0.1);
+    --downTransparent15: rgba(0, 0, 0, 0.15);
+    --downTransparent20: rgba(0, 0, 0, 0.2);
+    --textDown: #fff;
+    --primary: #90caf9;
+    --primaryTransparent: #90caf91a;
+    --errorBackground: #6e2f2f;
+  }
+  &__wickedPurple {
+    --backgroundUp: #f1dcf9;
+    --primary: #9b0fca;
+    --primaryTransparent: #9b0fca16;
+  }
+  &__greenWash {
+    --backgroundUp: #b8d62a;
+    --primary: #0a9828;
+    --primaryTransparent: #0a982810;
+  }
+  &__innovation {
+    --down: #f1f6f8;
+    --textDown: #f1f6f8;
+    --backgroundDown: #020a12;
+    --up: #061b32;
+    --backgroundUp: #061b32;
+    --primary: #58d5f8;
+    --primaryTransparent: #58d5f813;
+  }
+  &__ukraine {
+    --backgroundUp: #ffd700;
+    --primary: #0057b7;
+    --primaryTransparent: #0058b714;
+  }
+  &__transRights {
+    --backgroundUp: #f7a8b8;
+    --primary: #55cdfc;
+    --primaryTransparent: #55cdfc10;
+  }
+  &__monochrome {
+    * {
+      border-radius: 0 !important;
+    }
+    --backgroundUp: #ddd;
+    --backgroundDown: #ddd;
+    --up: #fff;
+    --down: #000;
+    --downTransparent05: rgba(0, 0, 0, 0);
+    --downTransparent07: rgba(0, 0, 0, 0);
+    --downTransparent10: rgba(0, 0, 0, 0);
+    --downTransparent15: rgba(0, 0, 0, 0);
+    --downTransparent20: rgba(66, 66, 66, 0);
+    --textDown: #000;
+    --primary: #000;
+    --primaryTransparent: #00000011;
+    --errorBackground: #ccc;
+  }
+}
 
-@mixin desktop {
-  @media (min-width: 450px) {
-    @content;
+@mixin shadows {
+  box-shadow: 2.9px 2.7px 2.8px var(--downTransparent05),
+    7.2px 6.8px 11.3px var(--downTransparent07),
+    13.2px 12.4px 29.1px var(--downTransparent10),
+    17px 16px 80px var(--downTransparent15);
+}
+
+@mixin smoothInsetShadows {
+  border: 1px solid var(--backgroundDown);
+  box-shadow: inset 1px 1px 2.8px var(--downTransparent05),
+    inset 2px 2px 11.3px var(--downTransparent07);
+}
+
+@mixin niceScrolls {
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 11px;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: var(--backgroundUp);
+    border-radius: 4rem;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--textDown);
+    border-radius: 4rem;
+  }
+}
+
+@mixin animateIn {
+  animation-name: animateIn;
+  animation-duration: 200ms;
+  animation-delay: calc(var(--animation-delay) * 150ms);
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes animateIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

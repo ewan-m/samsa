@@ -1,0 +1,77 @@
+@import "./variables.scss";
+
+.appTab {
+  background-color: var(--up);
+  @include shadows;
+  @include animateIn;
+  border-radius: 0.75rem;
+
+  &--transitions {
+    transition: all 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+    overflow: hidden !important;
+  }
+
+  &--dragOver {
+    opacity: 0 !important;
+  }
+
+  &--inactive {
+    max-width: 4rem;
+    min-width: 4rem;
+    min-height: 4rem;
+    max-height: 4rem;
+    height: 4rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    margin: 0 calc(200px - 2rem);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--primary);
+    font-size: 2.5rem;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+
+  &--active {
+    margin: 0 0.75rem;
+    min-width: 400px;
+    border-radius: 1rem;
+    flex-shrink: 0;
+    height: 100%;
+    resize: horizontal;
+    @include niceScrolls;
+  }
+}
+
+.tabContent {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  @include animateIn;
+}
+
+.tabControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.tabControlButton {
+  color: var(--primary);
+  outline: 0;
+  cursor: pointer;
+  border: none;
+  background: var(--up);
+  font-weight: 700;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  display: flex;
+  &:hover {
+    background-color: var(--primary);
+    color: var(--up);
+  }
+}

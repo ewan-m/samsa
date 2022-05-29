@@ -1,0 +1,24 @@
+@import "../../variables.scss";
+
+.connectionDisplay {
+  padding: 1rem;
+  @include smoothInsetShadows;
+  border-radius: 1rem;
+  border: 1px solid var(--backgroundUp);
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  p {
+    margin: 0;
+    display: block;
+    font-size: 1.5rem;
+  }
+  label {
+    padding: 0.3rem;
+    font-size: 0.75rem;
+    border-radius: 4rem;
+    display: block;
+    border: 1px solid var(--backgroundDown);
+  }
+}

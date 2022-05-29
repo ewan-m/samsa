@@ -1,0 +1,15 @@
+@import "../../variables.scss";
+
+.connections {
+  &__creates {
+    padding: 0;
+    list-style: none;
+
+    li {
+      padding-bottom: 0.75rem;
+      .button {
+        width: 100%;
+      }
+    }
+  }
+}

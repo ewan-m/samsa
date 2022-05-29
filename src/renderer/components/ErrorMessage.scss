@@ -1,0 +1,17 @@
+@import "../variables.scss";
+
+.errorMessage {
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  background-color: var(--errorBackground);
+  @include smoothInsetShadows;
+  &__title {
+    margin: 0 0 1.5rem;
+    font-family: "PlayfairDisplay";
+  }
+  &__content {
+    font-weight: 300;
+    font-family: "SourceSansPro";
+  }
+}

@@ -14,6 +14,7 @@ import {
   SetupMode,
   setupModes,
 } from "renderer/state/connections";
+import { useAutoAnimate } from "renderer/hooks/useAutoAnimate";
 
 type ParameterInput = { label: string; awsDefault?: string; key: string } & (
   | { inputType: "text" }
@@ -105,9 +106,10 @@ export const CreateConnection: FunctionComponent<{
     });
     navigate("/connections");
   };
+  const animationContainer = useAutoAnimate<HTMLDivElement>();
 
   return (
-    <div className="page">
+    <div ref={animationContainer} className="page">
       <BreadCrumbs
         extraCrumbs={[{ link: "/connections", text: "Connections" }]}
       />

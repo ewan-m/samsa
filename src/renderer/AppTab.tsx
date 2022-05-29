@@ -1,65 +1,43 @@
 import "./AppTab.scss";
 import { CSSProperties, FunctionComponent, useState } from "react";
 import { useAtom } from "jotai";
-import { useTimeout } from "./hooks/useTimeout";
 import { App } from "./App";
 import { Icon } from "./components/Icon";
 import { draggingTabAtom, tabsAtom } from "./state/tabs";
+import { useAutoAnimate } from "./hooks/useAutoAnimate";
 
 export const AppTab: FunctionComponent<{
   tabId: string;
-  isActive: boolean;
-}> = ({ tabId, isActive }) => {
+}> = ({ tabId }) => {
   const [tabs, setTabs] = useAtom(tabsAtom);
-  const [withTransitions, setWithTransitions] = useState("appTab--transitions");
-
-  useTimeout(
-    () => {
-      document.getElementById(tabId)?.scrollIntoView({ behavior: "smooth" });
-      if (isActive) {
-        setWithTransitions("");
-      }
-    },
-    300,
-    [isActive]
-  );
 
   const [draggingId, setDraggingId] = useAtom(draggingTabAtom);
   const [isDraggable, setIsDraggable] = useState(false);
+  const animationContainer = useAutoAnimate<HTMLDivElement>();
 
   return (
     <div
       id={tabId}
       style={
         {
-          "--animation-delay": isActive ? 2 : 6,
           width: "400px",
         } as CSSProperties
       }
-      onClick={() => {
-        if (!isActive) {
-          setTabs([
-            ...tabs.map(([id, active]) => [id, tabId === id ? true : active]),
-            [window.api.randomUUID(), false],
-          ] as [string, boolean][]);
-        }
-      }}
       onDrop={() => {
         if (draggingId === tabId) return;
         setTabs(
           tabs
-            .filter((tab) => tab[0] !== draggingId)
+            .filter((tab) => tab !== draggingId)
             .reduce(
-              (accumulation, current): [string, boolean][] =>
-                current[0] === tabId
-                  ? [...accumulation, [draggingId, true], current]
+              (accumulation, current) =>
+                current === tabId
+                  ? [...accumulation, draggingId, current]
                   : [...accumulation, current],
-
-              [] as [string, boolean][]
+              [] as string[]
             )
         );
       }}
-      draggable={isActive && isDraggable}
+      draggable={isDraggable}
       onDragStart={() => {
         setDraggingId(tabId);
       }}
@@ -67,42 +45,33 @@ export const AppTab: FunctionComponent<{
         e.preventDefault();
         return false;
       }}
-      role={isActive ? "region" : "button"}
-      className={`contentAppear appTab appTab--${
-        isActive ? "" : "in"
-      }active ${withTransitions}`}
+      className="appTab"
     >
-      {!isActive && <Icon>add</Icon>}
-      {isActive && (
-        <div
-          className="tabContent contentAppear"
-          style={{ "--animation-delay": 2 } as CSSProperties}
-        >
-          <div className="tabControls">
-            <button
-              onMouseEnter={() => {
-                setIsDraggable(true);
-              }}
-              onMouseLeave={() => {
-                setIsDraggable(false);
-              }}
-              className="tabControlButton"
-              style={{ cursor: "move" }}
-            >
-              <Icon>drag_indicator</Icon>
-            </button>
-            <button
-              onClick={() => {
-                setTabs(tabs.filter(([id]) => id !== tabId));
-              }}
-              className="tabControlButton"
-            >
-              <Icon>close</Icon>
-            </button>
-          </div>
-          <App />
+      <div ref={animationContainer} className="appTab__content">
+        <div className="appTab__controls">
+          <button
+            onMouseEnter={() => {
+              setIsDraggable(true);
+            }}
+            onMouseLeave={() => {
+              setIsDraggable(false);
+            }}
+            className="appTab__control"
+            style={{ cursor: "move" }}
+          >
+            <Icon>drag_indicator</Icon>
+          </button>
+          <button
+            onClick={() => {
+              setTabs(tabs.filter((id) => id !== tabId));
+            }}
+            className="appTab__control"
+          >
+            <Icon>close</Icon>
+          </button>
         </div>
-      )}
+        <App />
+      </div>
     </div>
   );
 };

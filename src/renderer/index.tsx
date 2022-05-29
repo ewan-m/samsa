@@ -3,15 +3,16 @@ import "./fonts/fonts.scss";
 import "./pages/Page.scss";
 import { createRoot } from "react-dom/client";
 import { AppTab } from "./AppTab";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { tabsAtom } from "./state/tabs";
 import { cssThemes, themeAtom } from "./state/theme";
 import { useEffect, useState } from "react";
 import { useTimeout } from "./hooks/useTimeout";
 import { useAutoAnimate } from "./hooks/useAutoAnimate";
+import { Icon } from "./components/Icon";
 
 const App = () => {
-  const tabs = useAtomValue(tabsAtom);
+  const [tabs, setTabs] = useAtom(tabsAtom);
   const theme = useAtomValue(themeAtom);
 
   const [themeClass, setThemeClass] = useState(cssThemes[theme]);
@@ -28,14 +29,22 @@ const App = () => {
     [theme]
   );
 
-  const [animationContainer] = useAutoAnimate<HTMLDivElement>();
+  const animationContainer = useAutoAnimate<HTMLDivElement>();
 
   return (
     <div className={themeClass} style={{ height: "100%" }}>
       <div ref={animationContainer} id="appContainer" className="container">
-        {tabs.map(([tabId, isActive]) => (
-          <AppTab key={tabId} tabId={tabId} isActive={isActive} />
+        {tabs.map((tabId) => (
+          <AppTab key={tabId} tabId={tabId} />
         ))}
+        <button
+          onClick={() => {
+            setTabs([...tabs, window.api.randomUUID()]);
+          }}
+          className="newTabButton"
+        >
+          <Icon>add</Icon>
+        </button>
       </div>
     </div>
   );

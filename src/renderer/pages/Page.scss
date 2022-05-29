@@ -6,8 +6,6 @@
   height: 1px;
   flex-direction: column;
   align-items: flex-start;
-  --animation-delay: 0;
-  @include animateIn;
 }
 
 .nonshrinkContent {

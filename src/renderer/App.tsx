@@ -8,23 +8,25 @@ import { Schemas } from "./pages/Schemas";
 import { Settings } from "./pages/Settings";
 import { Topics } from "./pages/Topics";
 
-export const App = () => (
-  <Router>
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/topics" element={<Topics />} />
-      <Route path="/schemas" element={<Schemas />} />
-      <Route path="/schemas/create" element={<CreateSchema />} />
-      <Route path="/connections" element={<Connections />} />
-      <Route
-        path="/connections/create-ssl-kafka"
-        element={<CreateSSLKafkaConnection />}
-      />
-      <Route
-        path="/connections/create-sasl-kafka"
-        element={<CreateSASLKafkaConnection />}
-      />
-      <Route path="/settings" element={<Settings />} />
-    </Routes>
-  </Router>
-);
+export const App = () => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/topics" element={<Topics />} />
+        <Route path="/schemas" element={<Schemas />} />
+        <Route path="/schemas/create" element={<CreateSchema />} />
+        <Route path="/connections" element={<Connections />} />
+        <Route
+          path="/connections/create-ssl-kafka"
+          element={<CreateSSLKafkaConnection />}
+        />
+        <Route
+          path="/connections/create-sasl-kafka"
+          element={<CreateSASLKafkaConnection />}
+        />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </Router>
+  );
+};

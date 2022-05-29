@@ -105,20 +105,3 @@
     border-radius: 4rem;
   }
 }
-
-@mixin animateIn {
-  animation-name: animateIn;
-  animation-duration: 200ms;
-  animation-delay: calc(var(--animation-delay) * 150ms);
-  animation-fill-mode: both;
-  animation-timing-function: cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-@keyframes animateIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}

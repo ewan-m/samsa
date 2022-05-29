@@ -240,7 +240,7 @@ function getCoords(el: Element): Coordinates {
   };
 }
 
-export function getTransitionSizes(
+function getTransitionSizes(
   el: Element,
   oldCoords: Coordinates,
   newCoords: Coordinates
@@ -443,7 +443,7 @@ function deletePosition(
   return [top, left, width, height];
 }
 
-export interface AutoAnimateOptions {
+interface AutoAnimateOptions {
   /**
    * The time it takes to run a single sequence of animations in milliseconds.
    */
@@ -455,10 +455,7 @@ export interface AutoAnimateOptions {
   easing: "linear" | "ease-in" | "ease-out" | "ease-in-out" | string;
 }
 
-/**
- * A custom plugin that determines what the effects to run
- */
-export interface AutoAnimationPlugin {
+interface AutoAnimationPlugin {
   <T extends "add" | "remove" | "remain">(
     el: Element,
     action: T,
@@ -476,7 +473,7 @@ export interface AutoAnimationPlugin {
  * @param el - A parent element to add animations to.
  * @param options - An optional object of options.
  */
-export default function autoAnimate(
+function autoAnimate(
   el: HTMLElement,
   config: Partial<AutoAnimateOptions> | AutoAnimationPlugin = {}
 ) {
@@ -498,22 +495,11 @@ export default function autoAnimate(
   }
 }
 
-/**
- * The vue directive.
- */
-export const vAutoAnimate = {
-  mounted: (
-    el: HTMLElement,
-    binding: { value: Partial<AutoAnimateOptions> | AutoAnimationPlugin }
-  ) => {
-    autoAnimate(el, binding.value || {});
-  },
-};
-
-export const useAutoAnimate = <T extends Element>(): [RefObject<T>] => {
+export const useAutoAnimate = <T extends Element>(): RefObject<T> => {
   const element = useRef<T>(null);
   useEffect(() => {
-    if (element.current instanceof HTMLElement) autoAnimate(element.current);
+    if (element.current instanceof HTMLElement)
+      autoAnimate(element.current, { duration: 150 });
   }, [element]);
-  return [element];
+  return element;
 };

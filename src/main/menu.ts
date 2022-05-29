@@ -1,34 +1,23 @@
 import { Menu, BrowserWindow } from "electron";
 
-export default class MenuBuilder {
-  mainWindow: BrowserWindow;
+export const configureMenu = (mainWindow: BrowserWindow) => {
+  mainWindow.setMenu(null);
 
-  constructor(mainWindow: BrowserWindow) {
-    this.mainWindow = mainWindow;
-  }
-
-  buildMenu(): void {
-    if (
-      process.env.NODE_ENV === "development" ||
-      process.env.DEBUG_PROD === "true"
-    ) {
-      this.setupDevelopmentEnvironment();
-      this.mainWindow.setMenu(null);
-    }
-  }
-
-  setupDevelopmentEnvironment(): void {
-    this.mainWindow.webContents.on("context-menu", (_, props) => {
+  if (
+    process.env.NODE_ENV === "development" ||
+    process.env.DEBUG_PROD === "true"
+  ) {
+    mainWindow.webContents.on("context-menu", (_, props) => {
       const { x, y } = props;
 
       Menu.buildFromTemplate([
         {
           label: "Inspect element",
           click: () => {
-            this.mainWindow.webContents.inspectElement(x, y);
+            mainWindow.webContents.inspectElement(x, y);
           },
         },
-      ]).popup({ window: this.mainWindow });
+      ]).popup({ window: mainWindow });
     });
   }
-}
+};

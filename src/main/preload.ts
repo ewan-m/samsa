@@ -1,21 +1,16 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
+import { randomUUID } from "crypto";
+import { contextBridge } from "electron";
+import { getAwsSecrets } from "./aws/getAwsSecrets";
+import { getAwsSsmParams } from "./aws/getAwsSsmParams";
+import { getSubjects } from "./kafka/getSubjects";
 
-export type Channels = "ipc-example";
+const exposedApi = {
+  randomUUID,
+  getSubjects: getSubjects,
+  getAwsSsmParams: getAwsSsmParams,
+  getAwsSecrets: getAwsSecrets,
+};
 
-contextBridge.exposeInMainWorld("electron", {
-  ipcRenderer: {
-    sendMessage(channel: Channels, args: unknown[]) {
-      ipcRenderer.send(channel, args);
-    },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
-      ipcRenderer.on(channel, subscription);
+export type ContextBridgeApi = typeof exposedApi;
 
-      return () => ipcRenderer.removeListener(channel, subscription);
-    },
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
-    },
-  },
-});
+contextBridge.exposeInMainWorld("api", exposedApi);

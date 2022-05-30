@@ -2,7 +2,7 @@ import { DependencyList, useEffect, useRef } from "react";
 
 export const useTimeout = (
   callback: () => void,
-  delay: number | null,
+  delay: number,
   deps: DependencyList = []
 ) => {
   const savedCallback = useRef(callback);
@@ -12,7 +12,7 @@ export const useTimeout = (
   }, [callback]);
 
   useEffect(() => {
-    if (!delay && delay !== 0) {
+    if (delay < 1) {
       return;
     }
 

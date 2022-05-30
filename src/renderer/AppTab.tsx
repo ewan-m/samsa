@@ -6,12 +6,29 @@ import { Icon } from "./components/Icon";
 import { draggingTabAtom, tabsAtom } from "./state/tabs";
 import { useAutoAnimate } from "./hooks/useAutoAnimate";
 
+const rearrangeTabs = (
+  allTabs: string[],
+  draggingTab: string,
+  landingTab: string
+) =>
+  allTabs
+    .filter((tab) => tab !== draggingTab)
+    .reduce(
+      (accumulation, current) =>
+        current === landingTab
+          ? allTabs.indexOf(landingTab) < allTabs.indexOf(draggingTab)
+            ? [...accumulation, draggingTab, landingTab]
+            : [...accumulation, landingTab, draggingTab]
+          : [...accumulation, current],
+      [] as string[]
+    );
+
 export const AppTab: FunctionComponent<{
   tabId: string;
 }> = ({ tabId }) => {
   const [tabs, setTabs] = useAtom(tabsAtom);
 
-  const [draggingId, setDraggingId] = useAtom(draggingTabAtom);
+  const [draggingTab, setDraggingTab] = useAtom(draggingTabAtom);
   const [isDraggable, setIsDraggable] = useState(false);
   const animationContainer = useAutoAnimate<HTMLDivElement>();
 
@@ -24,22 +41,12 @@ export const AppTab: FunctionComponent<{
         } as CSSProperties
       }
       onDrop={() => {
-        if (draggingId === tabId) return;
-        setTabs(
-          tabs
-            .filter((tab) => tab !== draggingId)
-            .reduce(
-              (accumulation, current) =>
-                current === tabId
-                  ? [...accumulation, draggingId, current]
-                  : [...accumulation, current],
-              [] as string[]
-            )
-        );
+        if (draggingTab === tabId) return;
+        setTabs(rearrangeTabs(tabs, draggingTab, tabId));
       }}
       draggable={isDraggable}
       onDragStart={() => {
-        setDraggingId(tabId);
+        setDraggingTab(tabId);
       }}
       onDragOver={(e) => {
         e.preventDefault();

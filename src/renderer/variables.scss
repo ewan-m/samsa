@@ -10,7 +10,11 @@
     --downTransparent15: rgba(0, 0, 0, 0.15);
     --downTransparent20: rgba(0, 0, 0, 0.2);
     --textDown: rgba(0, 0, 0, 0.87);
+    --textDownTransparent: rgba(0, 0, 0, 0.5);
     --primary: #1976d2;
+    --secondary: #9c27b0;
+    --warning: #ed6c02;
+    --success: #2e7d32;
     --primaryTransparent: #1976d21a;
     --errorBackground: #ffcece;
   }
@@ -25,19 +29,13 @@
     --downTransparent15: rgba(0, 0, 0, 0.15);
     --downTransparent20: rgba(0, 0, 0, 0.2);
     --textDown: #fff;
+    --textDownTransparent: #ffffffbe;
     --primary: #90caf9;
+    --secondary: #ce93d8;
+    --warning: #ffa726;
+    --success: #66bb6a;
     --primaryTransparent: #90caf91a;
     --errorBackground: #6e2f2f;
-  }
-  &__wickedPurple {
-    --backgroundUp: #f1dcf9;
-    --primary: #9b0fca;
-    --primaryTransparent: #9b0fca16;
-  }
-  &__greenWash {
-    --backgroundUp: #b8d62a;
-    --primary: #0a9828;
-    --primaryTransparent: #0a982810;
   }
   &__innovation {
     --down: #f1f6f8;
@@ -47,16 +45,6 @@
     --backgroundUp: #061b32;
     --primary: #58d5f8;
     --primaryTransparent: #58d5f813;
-  }
-  &__ukraine {
-    --backgroundUp: #ffd700;
-    --primary: #0057b7;
-    --primaryTransparent: #0058b714;
-  }
-  &__transRights {
-    --backgroundUp: #f7a8b8;
-    --primary: #55cdfc;
-    --primaryTransparent: #55cdfc10;
   }
   &__monochrome {
     * {
@@ -72,6 +60,7 @@
     --downTransparent15: rgba(0, 0, 0, 0);
     --downTransparent20: rgba(66, 66, 66, 0);
     --textDown: #000;
+    --textDown: #000000bc;
     --primary: #000;
     --primaryTransparent: #00000011;
     --errorBackground: #ccc;
@@ -92,7 +81,7 @@
 }
 
 @mixin niceScrolls {
-  overflow-y: auto;
+  overflow: auto;
   &::-webkit-scrollbar {
     width: 11px;
   }

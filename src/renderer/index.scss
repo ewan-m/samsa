@@ -38,3 +38,7 @@ body {
   align-items: center;
   color: var(--textDown);
 }
+::selection {
+  background-color: var(--secondary);
+  color: var(--up);
+}

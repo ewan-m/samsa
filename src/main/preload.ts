@@ -2,13 +2,18 @@ import { randomUUID } from "crypto";
 import { contextBridge } from "electron";
 import { getAwsSecrets } from "./aws/getAwsSecrets";
 import { getAwsSsmParams } from "./aws/getAwsSsmParams";
-import { getSubjects } from "./kafka/getSubjects";
+import { getSubjects, getSubjectValue } from "./kafka/subjects";
+import { getTopics } from "./kafka/topics";
+import { prettify } from "./prettify/prettify";
 
 const exposedApi = {
   randomUUID,
-  getSubjects: getSubjects,
+  getSubjects,
+  getSubjectValue,
+  getTopics,
   getAwsSsmParams: getAwsSsmParams,
   getAwsSecrets: getAwsSecrets,
+  prettify,
 };
 
 export type ContextBridgeApi = typeof exposedApi;

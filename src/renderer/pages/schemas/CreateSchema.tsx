@@ -1,25 +1,24 @@
-import { ChangeEvent, useState } from "react";
-import { BreadCrumbs } from "../components/BreadCrumbs";
+import { useState } from "react";
+import { BreadCrumbs } from "../../components/BreadCrumbs";
+import { CodeInput } from "renderer/components/CodeInput";
+
+const exampleSchema = {
+  type: "record",
+  name: "Schema",
+  fields: [],
+};
 
 export const CreateSchema = () => {
   const [subjectName, setSubjectName] = useState("");
-  const [subjectValue, setSubjectValue] = useState("");
-
-  const updateSubjectValue = ({ target }: ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = target;
-    try {
-      const parsed = JSON.parse(value);
-      setSubjectValue(JSON.stringify(parsed, null, 2));
-    } catch (error) {
-      setSubjectValue(value);
-    }
-  };
+  const [subjectValue, setSubjectValue] = useState(
+    JSON.stringify(exampleSchema, null, 1)
+  );
 
   return (
     <div className="page">
       <BreadCrumbs extraCrumbs={[{ link: "/schemas", text: "Schemas" }]} />
-      <h2 className="title">Create schema</h2>
-      <form className="form">
+      <h2 className="title nonshrinkContent">Create schema</h2>
+      <form className="form shrinkContent">
         <label className="form__label">
           Subject name
           <input
@@ -33,12 +32,10 @@ export const CreateSchema = () => {
         </label>
         <label className="form__label">
           Schema contents
-          <textarea
+          <CodeInput
             value={subjectValue}
-            onChange={(e) => {
-              setSubjectValue(e.target.value);
-            }}
-            className="form__input form__input--code"
+            onChange={(e) => setSubjectValue(e.target.value)}
+            language="json"
           />
         </label>
         <button className="form__submit">Create schema</button>

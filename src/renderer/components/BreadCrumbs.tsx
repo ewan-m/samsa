@@ -4,19 +4,25 @@ import { Fragment, FunctionComponent } from "react";
 
 export const BreadCrumbs: FunctionComponent<{
   extraCrumbs?: { link: string; text: string }[];
-}> = ({ extraCrumbs }) => (
+  current?: string;
+}> = ({ extraCrumbs, current }) => (
   <div className="nonshrinkContent">
-    <Link className="homeLink" to="/">
+    <Link className="breadcrumb" to="/">
       Home
     </Link>
     {" / "}
     {extraCrumbs?.map(({ link, text }) => (
       <Fragment key={link}>
-        <Link className="homeLink" to={link}>
+        <Link className="breadcrumb" to={link}>
           {text}
         </Link>
         {" / "}
       </Fragment>
     ))}
+    {current && (
+      <p title={current} className="breadcrumb breadcrumb--current">
+        {current}
+      </p>
+    )}
   </div>
 );

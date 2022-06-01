@@ -1,7 +1,16 @@
 @import "../variables.scss";
 
-.homeLink {
+.breadcrumb {
   text-decoration: none;
   color: var(--primary);
   font-weight: bold;
+
+  &--current {
+    margin: 0.5rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 46ch;
+    color: var(--textDown);
+    white-space: nowrap;
+  }
 }

@@ -4,7 +4,7 @@ import { BreadCrumbs } from "renderer/components/BreadCrumbs";
 import { Mechanism } from "./CreateSASLKafkaConnection";
 import { useAtomValue } from "jotai";
 import { connectionsAtom } from "renderer/state/connections";
-import { ConnectionDisplay } from "./ConnectionDisplay";
+import { DataTable } from "renderer/components/DataTable";
 
 export type BaseConfig = {
   connectionName: string;
@@ -36,25 +36,28 @@ export const Connections = () => {
     <div className="page">
       <BreadCrumbs />
       <h2 className="title nonshrinkContent">Connections</h2>
-      <div className="shrinkContent">
-        {Object.entries(connections).map(
-          ([connectionName, connectionValue]) => (
-            <ConnectionDisplay {...{ connectionName, connectionValue }} />
-          )
-        )}
-      </div>
-      <ul className="connections__creates nonshrinkContent">
-        <li>
-          <Link to="/connections/create-ssl-kafka" className="button">
-            Create SSL Kafka
-          </Link>
-        </li>
-        <li>
-          <Link to="/connections/create-sasl-kafka" className="button">
-            Create SASL Kafka
-          </Link>
-        </li>
-      </ul>
+      <DataTable
+        items={Object.keys(connections)}
+        onItemClick={() => {}}
+        actions={
+          <>
+            <Link to="/connections/create-ssl-kafka" className="button">
+              Create SSL Kafka
+            </Link>
+            <Link to="/connections/create-sasl-kafka" className="button">
+              Create SASL Kafka
+            </Link>
+
+            <Link to="/connections/create-sasl-kafka" className="button">
+              Import connections
+            </Link>
+
+            <Link to="/connections/create-sasl-kafka" className="button">
+              Share connections
+            </Link>
+          </>
+        }
+      />
     </div>
   );
 };

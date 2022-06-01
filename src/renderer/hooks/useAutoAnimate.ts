@@ -1,67 +1,23 @@
 import { RefObject, useEffect, useRef } from "react";
 
-/**
- * Absolute coordinate positions adjusted for scroll.
- */
 interface Coordinates {
   top: number;
   left: number;
   width: number;
   height: number;
 }
-/**
- * A set of all the parents currently being observe. This is the only non weak
- * registry.
- */
 const parents = new Set<Element>();
-/**
- * Element coordinates that is constantly kept up to date.
- */
 const coords = new WeakMap<Element, Coordinates>();
-/**
- * Siblings of elements that have been removed from the dom.
- */
 const siblings = new WeakMap<Element, [prev: Node | null, next: Node | null]>();
-/**
- * Animations that are currently running.
- */
 const animations = new WeakMap<Element, Animation>();
-/**
- * A map of existing intersection observers used to track element movements.
- */
 const intersections = new WeakMap<Element, IntersectionObserver>();
-/**
- * Intervals for automatically checking the position of elements occasionally.
- */
-const intervals = new WeakMap<Element, NodeJS.Timeout>();
-/**
- * The configuration options for each group of elements.
- */
-const options = new WeakMap<
-  Element,
-  AutoAnimateOptions | AutoAnimationPlugin
->();
-/**
- * Debounce counters by id, used to debounce calls to update positions.
- */
-const debounces = new WeakMap<Element, NodeJS.Timeout>();
-/**
- * The document used to calculate transitions.
- */
+const intervals = new WeakMap<Element, number>();
+const options = new WeakMap<Element, AutoAnimateOptions>();
+const debounces = new WeakMap<Element, number>();
 let root: HTMLElement;
-/**
- * Used to sign an element as the target.
- */
 const TGT = "__aa_tgt";
-/**
- * Used to sign an element as being part of a removal.
- */
 const DEL = "__aa_del";
 
-/**
- * Callback for handling all mutations.
- * @param mutations - A mutation list
- */
 const handleMutations: MutationCallback = (mutations) => {
   const elements = getElements(mutations);
   // If elements is "false" that means this mutation that should be ignored.
@@ -113,12 +69,11 @@ function observePosition(el: Element) {
 
 function updatePos(el: Element) {
   clearTimeout(debounces.get(el)!);
-  const optionsOrPlugin = getOptions(el);
-  const delay =
-    typeof optionsOrPlugin === "function" ? 500 : optionsOrPlugin.duration;
+  const options = getOptions(el);
+  const delay = options.duration;
   debounces.set(
     el,
-    setTimeout(() => {
+    window.setTimeout(() => {
       const currentAnimation = animations.get(el);
       if (!currentAnimation || currentAnimation.finished) {
         coords.set(el, getCoords(el));
@@ -132,7 +87,7 @@ function updateAllPos() {
   clearTimeout(debounces.get(root)!);
   debounces.set(
     root,
-    setTimeout(() => {
+    window.setTimeout(() => {
       parents.forEach((parent) =>
         forEach(parent, (el) => lowPriority(() => updatePos(el)))
       );
@@ -144,7 +99,7 @@ function poll(el: Element) {
   setTimeout(() => {
     intervals.set(
       el,
-      setInterval(() => lowPriority(updatePos.bind(null, el)), 2000)
+      window.setInterval(() => lowPriority(updatePos.bind(null, el)), 2000)
     );
   }, Math.round(2000 * Math.random()));
 }
@@ -272,7 +227,7 @@ function getTransitionSizes(
   return [widthFrom, widthTo, heightFrom, heightTo].map(Math.round);
 }
 
-function getOptions(el: Element): AutoAnimateOptions | AutoAnimationPlugin {
+function getOptions(el: Element): AutoAnimateOptions {
   return TGT in el && options.has((el as Element & { __aa_tgt: Element })[TGT])
     ? options.get((el as Element & { __aa_tgt: Element })[TGT])!
     : { duration: 250, easing: "ease-in-out" };
@@ -297,73 +252,54 @@ function remain(el: Element) {
   let animation: Animation;
   if (!oldCoords) return;
   const pluginOrOptions = getOptions(el);
-  if (typeof pluginOrOptions !== "function") {
-    const deltaX = oldCoords.left - newCoords.left;
-    const deltaY = oldCoords.top - newCoords.top;
-    const [widthFrom, widthTo, heightFrom, heightTo] = getTransitionSizes(
-      el,
-      oldCoords,
-      newCoords
-    );
-    const start: Record<string, any> = {
-      transform: `translate(${deltaX}px, ${deltaY}px)`,
-    };
-    const end: Record<string, any> = {
-      transform: `translate(0, 0)`,
-    };
-    if (widthFrom !== widthTo) {
-      start.width = `${widthFrom}px`;
-      end.width = `${widthTo}px`;
-    }
-    if (heightFrom !== heightTo) {
-      start.height = `${heightFrom}px`;
-      end.height = `${heightTo}px`;
-    }
-    animation = el.animate([start, end], pluginOrOptions);
-  } else {
-    animation = new Animation(
-      pluginOrOptions(el, "remain", oldCoords, newCoords)
-    );
-    animation.play();
+  const deltaX = oldCoords.left - newCoords.left;
+  const deltaY = oldCoords.top - newCoords.top;
+  const [widthFrom, widthTo, heightFrom, heightTo] = getTransitionSizes(
+    el,
+    oldCoords,
+    newCoords
+  );
+  const start: Record<string, any> = {
+    transform: `translate(${deltaX}px, ${deltaY}px)`,
+  };
+  const end: Record<string, any> = {
+    transform: `translate(0, 0)`,
+  };
+  if (widthFrom !== widthTo) {
+    start.width = `${widthFrom}px`;
+    end.width = `${widthTo}px`;
   }
+  if (heightFrom !== heightTo) {
+    start.height = `${heightFrom}px`;
+    end.height = `${heightTo}px`;
+  }
+  animation = el.animate([start, end], pluginOrOptions);
   animations.set(el, animation);
   coords.set(el, newCoords);
   animation.addEventListener("finish", updatePos.bind(null, el));
 }
 
-/**
- * Adds the element with a transition.
- * @param el - Animates the element being added.
- */
 function add(el: Element) {
   const newCoords = getCoords(el);
   coords.set(el, newCoords);
   const pluginOrOptions = getOptions(el);
   let animation: Animation;
-  if (typeof pluginOrOptions !== "function") {
-    animation = el.animate(
-      [
-        { transform: "scale(.98)", opacity: 0 },
-        { transform: "scale(0.98)", opacity: 0, offset: 0.5 },
-        { transform: "scale(1)", opacity: 1 },
-      ],
-      {
-        duration: pluginOrOptions.duration * 1.5,
-        easing: "ease-in",
-      }
-    );
-  } else {
-    animation = new Animation(pluginOrOptions(el, "add", newCoords));
-    animation.play();
-  }
+  animation = el.animate(
+    [
+      { transform: "scale(0.9)", opacity: 0 },
+      { transform: "scale(0.95)", opacity: 0, offset: 0.5 },
+      { transform: "scale(1)", opacity: 1 },
+    ],
+    {
+      duration: pluginOrOptions.duration * 1.5,
+      easing: "ease-in",
+    }
+  );
+
   animations.set(el, animation);
   animation.addEventListener("finish", updatePos.bind(null, el));
 }
 
-/**
- * Animates the removal of an element.
- * @param el - Element to remove
- */
 function remove(el: Element) {
   if (!siblings.has(el) || !coords.has(el)) return;
 
@@ -375,8 +311,7 @@ function remove(el: Element) {
     prev.parentNode.appendChild(el);
   }
   const [top, left, width, height] = deletePosition(el);
-  const optionsOrPlugin = getOptions(el);
-  const oldCoords = coords.get(el)!;
+  const options = getOptions(el);
   let animation: Animation;
   Object.assign((el as HTMLElement).style, {
     position: "absolute",
@@ -389,24 +324,20 @@ function remove(el: Element) {
     transformOrigin: "center",
     zIndex: 100,
   });
-  if (typeof optionsOrPlugin !== "function") {
-    animation = el.animate(
-      [
-        {
-          transform: "scale(1)",
-          opacity: 1,
-        },
-        {
-          transform: "scale(.98)",
-          opacity: 0,
-        },
-      ],
-      { duration: optionsOrPlugin.duration, easing: "ease-out" }
-    );
-  } else {
-    animation = new Animation(optionsOrPlugin(el, "remove", oldCoords));
-    animation.play();
-  }
+  animation = el.animate(
+    [
+      {
+        transform: "scale(1)",
+        opacity: 1,
+      },
+      {
+        transform: "scale(0.9)",
+        opacity: 0,
+      },
+    ],
+    { duration: options.duration, easing: "ease-out" }
+  );
+
   animations.set(el, animation);
   animation.addEventListener("finish", () => {
     el.remove();
@@ -444,38 +375,13 @@ function deletePosition(
 }
 
 interface AutoAnimateOptions {
-  /**
-   * The time it takes to run a single sequence of animations in milliseconds.
-   */
   duration: number;
-  /**
-   * The type of easing to use.
-   * Default: ease-in-out
-   */
   easing: "linear" | "ease-in" | "ease-out" | "ease-in-out" | string;
 }
 
-interface AutoAnimationPlugin {
-  <T extends "add" | "remove" | "remain">(
-    el: Element,
-    action: T,
-    newCoordinates?: T extends "add" | "remain" | "remove"
-      ? Coordinates
-      : undefined,
-    oldCoordinates?: T extends "remain" ? Coordinates : undefined
-  ): KeyframeEffect;
-}
-
-/**
- * A function that automatically adds animation effects to itself and its
- * immediate children. Specifically it adds effects for adding, moving, and
- * removing DOM elements.
- * @param el - A parent element to add animations to.
- * @param options - An optional object of options.
- */
 function autoAnimate(
   el: HTMLElement,
-  config: Partial<AutoAnimateOptions> | AutoAnimationPlugin = {}
+  config: Partial<AutoAnimateOptions> = {}
 ) {
   if (mutations && resize) {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -485,11 +391,7 @@ function autoAnimate(
       Object.assign(el.style, { position: "relative" });
     }
     forEach(el, updatePos, poll, (element) => resize?.observe(element));
-    if (typeof config === "function") {
-      options.set(el, config);
-    } else {
-      options.set(el, { duration: 250, easing: "ease-in-out", ...config });
-    }
+    options.set(el, { duration: 250, easing: "ease-in-out", ...config });
     mutations.observe(el, { childList: true });
     parents.add(el);
   }

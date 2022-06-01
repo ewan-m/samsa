@@ -1,0 +1,93 @@
+@import "../variables.scss";
+
+.dataTable {
+  margin-bottom: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: inset 1px 1px 2px var(--downTransparent07),
+    inset 3px 4px 5px var(--downTransparent10);
+
+  &__item {
+    margin: 0;
+    padding: 1rem;
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--textDown);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid var(--backgroundUp);
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: left;
+    &:hover {
+      box-shadow: inset 1px 1px 2px var(--downTransparent07),
+        inset 3px 4px 5px var(--downTransparent10);
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -0.3rem;
+    > * {
+      margin: 0.3rem;
+    }
+  }
+
+  &__filterToggle {
+    background: none;
+    border: none;
+    font-weight: 700;
+    padding: 0.5rem 0;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--primary);
+  }
+
+  &__search {
+    display: block;
+    position: relative;
+    margin-bottom: 0.5rem;
+    color: var(--textDownTransparent);
+    background-color: var(--up);
+
+    &__icon {
+      position: absolute;
+      position: absolute;
+      left: 7px;
+      top: calc(50% - 10px);
+    }
+    &__input {
+      font-family: inherit;
+      border: none;
+      padding: 0.5rem;
+      padding-left: 2rem;
+      border-radius: 0.5rem;
+      font-weight: 900;
+      background-color: var(--up);
+      color: var(--textDown);
+      &::placeholder {
+        color: var(--textDownTransparent);
+      }
+      &:focus {
+        box-shadow: 0px 0px 0.5px 2px var(--primary);
+      }
+    }
+
+    &__advanced {
+      font-family: "XantiTypewriter";
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      width: 100%;
+      box-sizing: border-box;
+      &:focus {
+        box-shadow: 0px 0px 0.5px 2px var(--primary);
+      }
+    }
+  }
+}

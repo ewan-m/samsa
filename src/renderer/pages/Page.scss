@@ -21,7 +21,6 @@
   padding: 0 0.5rem;
   width: calc(100% - 1rem);
   box-sizing: border-box;
-  min-height: 100px;
   &:last-child {
     margin-bottom: 0;
   }
@@ -33,7 +32,7 @@
   font-family: "PlayfairDisplay";
   font-size: 3rem;
   font-weight: 400;
-  padding-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .form {
@@ -64,15 +63,6 @@
     transition: box-shadow 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
     background-color: var(--backgroundUp);
     color: var(--textDown);
-
-    &--code {
-      font-family: "XantiTypewriter";
-      font-size: 0.75rem;
-      width: 100%;
-      min-height: 300px;
-      box-sizing: border-box;
-      @include niceScrolls;
-    }
 
     &:focus {
       box-shadow: 0px 0px 0.5px 2px var(--primary);
@@ -119,7 +109,7 @@
 
 .button {
   padding: 0.75rem;
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--primary);
   border-radius: 3rem;
@@ -136,24 +126,5 @@
   &:hover {
     color: var(--up);
     background-color: var(--primary);
-  }
-}
-
-.dataTable {
-  margin-bottom: 1.5rem;
-  border-radius: 0.5rem;
-  box-shadow: inset 1px 1px 2px var(--downTransparent07),
-    inset 3px 4px 5px var(--downTransparent10);
-
-  &__item {
-    margin: 0;
-    padding: 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--textDown);
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    border-bottom: 1px solid var(--backgroundUp);
   }
 }

@@ -29,11 +29,7 @@ export const ViewSchema = () => {
         current={subjectName}
       />
       <div className="shrinkContent">
-        <CodeInput
-          value={subjectValue}
-          onChange={null}
-          language="json"
-        />
+        <CodeInput value={subjectValue} onChange={null} language="json" />
       </div>
     </div>
   );

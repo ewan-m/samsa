@@ -104,7 +104,7 @@ export const DataTable: FunctionComponent<{
         ))}
         {items && filteredItems.length > sliceCap && (
           <button
-            onClick={(e) => {
+            onClick={() => {
               setSliceCap(sliceCap + 5);
             }}
             style={{ margin: "0.75rem" }}

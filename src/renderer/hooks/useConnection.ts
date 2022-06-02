@@ -1,22 +1,23 @@
 import { useAtomValue } from "jotai";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   BaseConfig,
   ConnectionConfig,
 } from "renderer/pages/connections/Connections";
 import { Mechanism } from "renderer/pages/connections/CreateSASLKafkaConnection";
-import {
-  connectionsAtom,
-  selectedConnectionAtom,
-} from "renderer/state/connections";
+import { connectionsAtom } from "renderer/state/connections";
+import { TabIdContext, tabsAtom } from "renderer/state/tabs";
 
 export const useConnection = (): ConnectionConfig | undefined => {
   const connections = useAtomValue(connectionsAtom);
-  const selectedConnectionKey = useAtomValue(selectedConnectionAtom);
-
   const navigate = useNavigate();
 
-  const connection = connections[selectedConnectionKey];
+  const tabId = useContext(TabIdContext);
+  const tabs = useAtomValue(tabsAtom);
+  const selectedConnection = tabs[tabId].connection;
+
+  const connection = connections[selectedConnection];
 
   if (!connection) {
     navigate("/connections");
@@ -24,7 +25,6 @@ export const useConnection = (): ConnectionConfig | undefined => {
   }
 
   const {
-    connectionName,
     schemaUsername,
     schemaPassword,
     schemaUri,
@@ -38,7 +38,7 @@ export const useConnection = (): ConnectionConfig | undefined => {
   } = connection.resolvedParameters;
 
   const baseConfig: BaseConfig = {
-    connectionName,
+    connectionName: selectedConnection,
     schemaUsername,
     schemaPassword,
     schemaUri,

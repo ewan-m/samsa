@@ -15,6 +15,14 @@ const App = () => {
   const [tabs, setTabs] = useAtom(tabsAtom);
   const theme = useAtomValue(themeAtom);
 
+  useEffect(() => {
+    if (["Dark", "Innovation"].includes(theme)) {
+      document.documentElement.setAttribute("data-color-mode", "dark");
+    } else {
+      document.documentElement.setAttribute("data-color-mode", "light");
+    }
+  }, [theme]);
+
   const [themeClass, setThemeClass] = useState(cssThemes[theme]);
 
   useEffect(() => {
@@ -30,16 +38,20 @@ const App = () => {
   );
 
   const animationContainer = useAutoAnimate<HTMLDivElement>();
+  const tabsList = Object.entries(tabs);
 
   return (
     <div className={themeClass} style={{ height: "100%" }}>
       <div ref={animationContainer} id="appContainer" className="container">
-        {tabs.map((tabId) => (
+        {tabsList.map(([tabId]) => (
           <AppTab key={tabId} tabId={tabId} />
         ))}
         <button
           onClick={() => {
-            setTabs([...tabs, window.api.randomUUID()]);
+            setTabs({
+              ...tabs,
+              [window.api.randomUUID()]: { connection: "", initialPath: null },
+            });
           }}
           className="newTabButton"
         >

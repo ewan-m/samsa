@@ -1,4 +1,3 @@
-import { atom } from "jotai";
 import { atomWithLocalStorage } from "./atomWithLocalStorage";
 
 export const setupModes = {
@@ -19,5 +18,3 @@ export type PersistedConnection = {
 export const connectionsAtom = atomWithLocalStorage<{
   [connectionName: string]: PersistedConnection;
 }>("connections", {});
-
-export const selectedConnectionAtom = atom("");

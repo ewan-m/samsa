@@ -1,21 +1,17 @@
-import { useAtom, useAtomValue } from "jotai";
+import { useAtomValue } from "jotai";
 import { useEffect } from "react";
-import {
-  connectionsAtom,
-  selectedConnectionAtom,
-} from "renderer/state/connections";
+import { useTabsState } from "renderer/hooks/useTabState";
+import { connectionsAtom } from "renderer/state/connections";
 import { NavigationCard } from "./NavigationCard";
 
 export const Home = () => {
   const connections = useAtomValue(connectionsAtom);
-  const [selectedConnection, setSelectedConnection] = useAtom(
-    selectedConnectionAtom
-  );
+  const [tabState, setTabState] = useTabsState();
   const connectionNames = Object.keys(connections);
 
   useEffect(() => {
-    if (selectedConnection === "") {
-      setSelectedConnection(connectionNames[0] ?? "");
+    if (tabState.connection === "") {
+      setTabState({ ...tabState, connection: connectionNames[0] ?? "" });
     }
   }, [connections]);
   return (
@@ -26,9 +22,9 @@ export const Home = () => {
           Connection
           <select
             className="form__input"
-            value={selectedConnection}
+            value={tabState.connection}
             onChange={(e) => {
-              setSelectedConnection(e.target.value);
+              setTabState({ ...tabState, connection: e.target.value });
             }}
           >
             {connectionNames.map((name) => (

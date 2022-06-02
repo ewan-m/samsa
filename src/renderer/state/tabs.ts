@@ -1,5 +1,18 @@
 import { atom } from "jotai";
+import { createContext } from "react";
 
-export const tabsAtom = atom<string[]>([window.api.randomUUID()]);
+export type TabState = {
+  connection: string;
+  initialPath: string | null;
+};
+
+export const tabsAtom = atom<{ [tabId: string]: TabState }>({
+  [window.api.randomUUID()]: {
+    initialPath: null,
+    connection: "",
+  },
+});
 
 export const draggingTabAtom = atom("");
+
+export const TabIdContext = createContext("");

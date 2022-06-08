@@ -15,6 +15,7 @@ import {
   setupModes,
 } from "renderer/state/connections";
 import { useAutoAnimate } from "renderer/hooks/useAutoAnimate";
+import { FetchStatus } from "renderer/types/FetchStatus";
 
 type ParameterInput = { label: string; awsDefault?: string; key: string } & (
   | { inputType: "text" }
@@ -58,9 +59,7 @@ export const CreateConnection: FunctionComponent<{
     setParams(newParams);
   }, [isAws]);
 
-  const [fetchStatus, setFetchStatus] = useState<
-    "fetching" | "fetched" | "errored"
-  >("fetching");
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>("fetching");
   const [errorMessage, setErrorMessage] = useState("" as any);
 
   const progressToConfirmation: MouseEventHandler<HTMLButtonElement> = async (

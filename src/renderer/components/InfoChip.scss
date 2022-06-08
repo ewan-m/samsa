@@ -1,0 +1,30 @@
+@import "../variables.scss";
+
+.infoChip {
+  font-size: 0.8rem;
+  margin: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  margin-right: 0.5rem;
+  border-radius: 3rem;
+  padding: 0.1rem;
+  padding-right: 0.7rem;
+  @include smoothInsetShadows;
+  border: none;
+  color: var(--textDown);
+
+  &__value {
+    font-weight: 700;
+    margin-right: 0.4rem;
+    border-radius: 2rem;
+    min-width: 1.7rem;
+    min-height: 1.7rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary);
+    color: var(--up);
+  }
+}

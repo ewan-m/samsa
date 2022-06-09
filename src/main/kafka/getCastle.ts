@@ -19,6 +19,7 @@ export const getCastle = async (config: ConnectionConfig): Promise<Castle> => {
       kafka: {
         brokers: [config.clusterUri],
         connectionTimeout: 5000,
+        retry: { retries: 2 },
         ...(config.type === "ssl"
           ? {
               ssl: {

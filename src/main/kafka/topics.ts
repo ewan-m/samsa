@@ -31,11 +31,29 @@ export type TopicOffset = {
 export const getTopicOffsets = async (
   config: ConnectionConfig,
   topicName: string,
-  timestamp: number = new Date().getTime()
+  timestamp: number
 ): Promise<TopicOffset[]> => {
   const castle = await getCastle(config);
 
-  return await castle.kafka
+  const offsets = await castle.kafka
     .admin()
     .fetchTopicOffsetsByTimestamp(topicName, timestamp);
+
+  return offsets;
+};
+
+export const getTopicTotals = async (
+  config: ConnectionConfig,
+  topicName: string
+): Promise<{ messages: number; partitions: number }> => {
+  const castle = await getCastle(config);
+
+  const topicOffsets = await castle.kafka.admin().fetchTopicOffsets(topicName);
+
+  const messages = topicOffsets.reduce(
+    (sum, { high, low }) => sum + parseInt(high) - parseInt(low),
+    0
+  );
+
+  return { messages, partitions: topicOffsets.length };
 };

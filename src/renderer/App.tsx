@@ -15,6 +15,7 @@ import { Topics } from "./pages/topics/Topics";
 import { ViewSchema } from "./pages/schemas/ViewSchema";
 import { useTabsState } from "./hooks/useTabState";
 import { useEffect } from "react";
+import { Topic } from "./pages/topics/Topic";
 
 const AppRoutes = () => {
   const [{ initialPath }] = useTabsState();
@@ -29,6 +30,7 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/topics" element={<Topics />} />
+      <Route path="/topics/:topicName" element={<Topic />} />
       <Route path="/schemas" element={<Schemas />} />
       <Route path="/schemas/create" element={<CreateSchema />} />
       <Route path="/schemas/:subjectName" element={<ViewSchema />} />

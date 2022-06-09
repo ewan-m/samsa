@@ -1,4 +1,4 @@
-import { atomWithLocalStorage } from "./atomWithLocalStorage";
+import { atomWithStorage } from "jotai/utils";
 
 export const setupModes = {
   Manual: "Specify the parameters manually",
@@ -15,6 +15,6 @@ export type PersistedConnection = {
   setupMode: SetupMode;
 };
 
-export const connectionsAtom = atomWithLocalStorage<{
+export const connectionsAtom = atomWithStorage<{
   [connectionName: string]: PersistedConnection;
 }>("connections", {});

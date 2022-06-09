@@ -1,4 +1,4 @@
-import { atomWithLocalStorage } from "./atomWithLocalStorage";
+import { atomWithStorage } from "jotai/utils";
 
 export const cssThemes = {
   Light: "theme__defaultLight",
@@ -8,7 +8,7 @@ export const cssThemes = {
 };
 
 export type Theme = keyof typeof cssThemes;
-export const themeAtom = atomWithLocalStorage<Theme>(
+export const themeAtom = atomWithStorage<Theme>(
   "theme",
   window?.matchMedia?.("(prefers-color-scheme: dark)")?.matches
     ? "Dark"

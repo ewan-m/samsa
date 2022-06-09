@@ -108,7 +108,7 @@ export const DataTable: FunctionComponent<{
               setSliceCap(sliceCap + 5);
             }}
             style={{ margin: "0.75rem" }}
-            className="button"
+            className="button button--secondary"
           >
             Load more
           </button>

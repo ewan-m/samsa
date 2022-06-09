@@ -161,7 +161,7 @@ export const CreateConnection: FunctionComponent<{
             </label>
             <button
               type="submit"
-              className="form__submit"
+              className="form__submit button"
               onClick={(e) => {
                 e.preventDefault();
                 connectionName && setStep(1);
@@ -217,7 +217,10 @@ export const CreateConnection: FunctionComponent<{
               )}
             </label>
           ))}
-          <button onClick={progressToConfirmation} className="form__submit">
+          <button
+            onClick={progressToConfirmation}
+            className="form__submit button"
+          >
             {isAws ? "Fetch parameters" : "Confirm connection"}
           </button>
         </form>
@@ -233,7 +236,7 @@ export const CreateConnection: FunctionComponent<{
                 Double check the configuration above appears correct then hit
                 save to start interacting with the cluster.
               </p>
-              <button onClick={saveConnection} className="form__submit">
+              <button onClick={saveConnection} className="form__submit button">
                 Save connection configuration
               </button>
             </div>

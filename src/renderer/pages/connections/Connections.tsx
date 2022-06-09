@@ -41,18 +41,28 @@ export const Connections = () => {
         onItemClick={() => {}}
         actions={
           <>
-            <Link to="/connections/create-ssl-kafka" className="button">
+            <Link
+              to="/connections/create-ssl-kafka"
+              className="button button--secondary"
+            >
               Create SSL Kafka
             </Link>
-            <Link to="/connections/create-sasl-kafka" className="button">
+            <Link
+              to="/connections/create-sasl-kafka"
+              className="button button--secondary"
+            >
               Create SASL Kafka
             </Link>
-
-            <Link to="/connections/create-sasl-kafka" className="button">
+            <Link
+              to="/connections/create-sasl-kafka"
+              className="button button--secondary"
+            >
               Import connections
             </Link>
-
-            <Link to="/connections/create-sasl-kafka" className="button">
+            <Link
+              to="/connections/create-sasl-kafka"
+              className="button button--secondary"
+            >
               Share connections
             </Link>
           </>

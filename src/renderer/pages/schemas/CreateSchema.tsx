@@ -38,7 +38,7 @@ export const CreateSchema = () => {
             language="json"
           />
         </label>
-        <button className="form__submit">Create schema</button>
+        <button className="form__submit button">Create schema</button>
       </form>
     </div>
   );

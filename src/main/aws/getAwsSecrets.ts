@@ -2,9 +2,19 @@ import { SecretsManager } from "@aws-sdk/client-secrets-manager";
 
 export const getAwsSecrets = async (
   connectionConfig: Record<string, string>,
-  region: string
+  region: string,
+  accessKeyId: string,
+  secretAccessKey: string,
+  sessionToken: string
 ): Promise<Record<string, string> | undefined> => {
-  const secretsManager = new SecretsManager({ region: region });
+  const secretsManager = new SecretsManager({
+    region,
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+      sessionToken,
+    },
+  });
   const secretNames = Object.values(connectionConfig);
 
   const secretList = (

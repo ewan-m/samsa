@@ -16,6 +16,7 @@ import {
 } from "renderer/state/connections";
 import { useAutoAnimate } from "renderer/hooks/useAutoAnimate";
 import { FetchStatus } from "renderer/types/FetchStatus";
+import ReactJson from "@microlink/react-json-view";
 
 type ParameterInput = { label: string; awsDefault?: string; key: string } & (
   | { inputType: "text" }
@@ -34,6 +35,9 @@ export const CreateConnection: FunctionComponent<{
   const [setupMode, setSetupMode] = useState<SetupMode>("Manual");
 
   const [awsRegion, setAwsRegion] = useState("eu-west-1");
+  const [awsAccessKeyId, setAwsAccessKeyId] = useState("");
+  const [awsSecretAccessKey, setAwsSecretAccessKey] = useState("");
+  const [awsSessionToken, setAwsSessionToken] = useState("");
 
   const [connectionName, setConnectionName] = useState("");
   const [params, setParams] = useState<Record<string, string>>({});
@@ -75,7 +79,13 @@ export const CreateConnection: FunctionComponent<{
       } else {
         const fetchedParams = await (setupMode === "AWS SSM"
           ? window.api.getAwsSsmParams
-          : window.api.getAwsSecrets)(params, awsRegion);
+          : window.api.getAwsSecrets)(
+          params,
+          awsRegion,
+          awsAccessKeyId,
+          awsSecretAccessKey,
+          awsSessionToken
+        );
         if (!fetchedParams) {
           throw Error();
         } else {
@@ -176,18 +186,56 @@ export const CreateConnection: FunctionComponent<{
       {step === 1 && (
         <form className="form shrinkContent">
           {isAws && (
-            <label className="form__label">
-              AWS Region
-              <input
-                className="form__input"
-                type="text"
-                spellCheck={false}
-                value={awsRegion}
-                onChange={(e) => {
-                  setAwsRegion(e.target.value);
-                }}
-              />
-            </label>
+            <>
+              <label className="form__label">
+                AWS Region
+                <input
+                  className="form__input"
+                  type="text"
+                  spellCheck={false}
+                  value={awsRegion}
+                  onChange={(e) => {
+                    setAwsRegion(e.target.value);
+                  }}
+                />
+              </label>
+              <label className="form__label">
+                AWS Access Key ID
+                <input
+                  className="form__input"
+                  type="text"
+                  spellCheck={false}
+                  value={awsAccessKeyId}
+                  onChange={(e) => {
+                    setAwsAccessKeyId(e.target.value);
+                  }}
+                />
+              </label>
+              <label className="form__label">
+                AWS Secret Access Key
+                <input
+                  className="form__input"
+                  type="text"
+                  spellCheck={false}
+                  value={awsSecretAccessKey}
+                  onChange={(e) => {
+                    setAwsSecretAccessKey(e.target.value);
+                  }}
+                />
+              </label>
+              <label className="form__label">
+                AWS Session Token
+                <input
+                  className="form__input"
+                  type="text"
+                  spellCheck={false}
+                  value={awsSessionToken}
+                  onChange={(e) => {
+                    setAwsSessionToken(e.target.value);
+                  }}
+                />
+              </label>
+            </>
           )}
 
           {parameters.map((parameter) => (
@@ -229,9 +277,7 @@ export const CreateConnection: FunctionComponent<{
         <>
           {fetchStatus === "fetched" && (
             <div>
-              <code className="readonlyCode">
-                {JSON.stringify(resolvedParams, null, 2)}
-              </code>
+              <ReactJson src={resolvedParams} />
               <p className="paragraph">
                 Double check the configuration above appears correct then hit
                 save to start interacting with the cluster.

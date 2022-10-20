@@ -22,7 +22,7 @@ export const CodeInput: FunctionComponent<{
         dangerouslySetInnerHTML={{
           __html: highlight(value, languages[language], language),
         }}
-        aria-hidden={true}
+        aria-hidden={onChange !== null}
         className="codeInput__display"
       ></pre>
     </div>

@@ -1,7 +1,12 @@
 import { randomUUID } from "crypto";
 import { contextBridge } from "electron";
+import {
+  getAwsEventSourceMappings,
+  toggleAwsEventSourceMapping,
+} from "./aws/getAwsEventSourceMappings";
 import { getAwsSecrets } from "./aws/getAwsSecrets";
 import { getAwsSsmParams } from "./aws/getAwsSsmParams";
+import { setOffset } from "./kafka/consumers";
 import { getSubjects, getSubjectValue } from "./kafka/subjects";
 import {
   getTopicConfig,
@@ -21,6 +26,9 @@ const exposedApi = {
   getTopicTotals,
   getAwsSsmParams: getAwsSsmParams,
   getAwsSecrets: getAwsSecrets,
+  getAwsEventSourceMappings: getAwsEventSourceMappings,
+  toggleAwsEventSourceMapping: toggleAwsEventSourceMapping,
+  setOffset: setOffset,
   prettify,
 };
 

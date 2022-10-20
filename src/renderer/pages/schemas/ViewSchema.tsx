@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useConnection } from "../../hooks/useConnection";
 import { BreadCrumbs } from "../../components/BreadCrumbs";
-import { CodeInput } from "renderer/components/CodeInput";
+import ReactJson from "@microlink/react-json-view";
+import { JsonViewer } from "renderer/components/JsonViewer";
 
 export const ViewSchema = () => {
   const connection = useConnection();
@@ -29,7 +30,7 @@ export const ViewSchema = () => {
         current={subjectName}
       />
       <div className="shrinkContent">
-        <CodeInput value={subjectValue} onChange={null} language="json" />
+        {subjectValue && <JsonViewer json={JSON.parse(subjectValue)} />}
       </div>
     </div>
   );
